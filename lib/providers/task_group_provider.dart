@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app/models/task_group.dart';
+import 'package:todo_app/pages/task_group_list/widgets/delete_task_group.dart';
 import 'package:todo_app/repository/supabase_repository.dart';
 
 class TaskGroupProvider extends ChangeNotifier {
@@ -32,6 +33,17 @@ class TaskGroupProvider extends ChangeNotifier {
       final tets = new TaskGroupWithCounts(
           taskGroup: taskGroup, totalTasks: 0, completedTasks: 0);
       _taskGroupsWithCounts.add(tets);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> DeleteTaskGroup(String taskGroupId) async {
+    try {
+      await _repo.deleteTaskGroup(taskGroupId);
+      _taskGroupsWithCounts.removeWhere((taskGroupsWithCounts) =>
+          taskGroupsWithCounts.taskGroup.id == taskGroupId);
       notifyListeners();
     } catch (e) {
       print(e);
